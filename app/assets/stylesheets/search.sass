@@ -1,3 +1,185 @@
-// Place all the styles related to the search controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+// Clear CSS
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video
+  margin: 0px
+  padding: 0
+  border: 0
+  font-size: 100%
+  font: inherit
+  vertical-align: baseline
+  outline: none
+  -webkit-font-smoothing: antialiased
+  -webkit-text-size-adjust: 100%
+  -ms-text-size-adjust: 100%
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+body
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif
+  
+// Search index
+
+input, textarea
+  -webkit-font-smoothing: antialiased
+  -webkit-text-size-adjust: 100%
+  -ms-text-size-adjust: 100%
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  outline: none
+
+div.tagsinput
+  border: 1px solid #CCC
+  background: #FFF
+  padding: 5px
+  width: 600px
+  height: 135px
+  overflow-y: auto
+  span.tag
+    border: 2px solid whitesmoke
+    -moz-border-radius: 2px
+    -webkit-border-radius: 2px
+    display: block
+    float: left
+    padding: 5px
+    margin-top: 2px
+    margin-right: 5px
+    text-decoration: none
+    background: #76a312
+    color: white
+    font-family: helvetica
+  span.tag a
+    font-weight: bold
+    color: white
+    text-decoration: none
+    font-size: 17px
+  input
+    width: 80px
+    margin: 0px
+    font-family: helvetica
+    font-size: 13px
+    border: 1px solid transparent
+    padding: 5px
+    background: transparent
+    color: #000
+    outline: 0px
+    margin-right: 5px
+    margin-bottom: 5px
+  div
+    display: block
+    float: left
+
+#sites_tag
+  width: 250px
+  margin-top: 2px
+
+.tags_clear
+  clear: both
+  width: 100%
+  height: 0px
+
+.not_valid
+  background: #FBD8DB !important
+  color: #90111A !important
+
+.header, .search
+  position: relative
+  left: 50%
+  width: 600px
+  margin-left: -300px
+
+.header
+  margin-top: 80px
+  height: 115px
+  text-align: center
+  h1
+    font-size: 22px
+    font-weight: 300
+    color: #666
+    text-shadow: 0 1px 1px rgba(255,255,255,0.6)
+    strong
+      font-size: 30px
+      font-weight: 700
+  h1.sub
+    color: #7db500
+    strong
+      font-size: 22px
+
+.search-button
+  position: relative
+  left: 256px
+  top: 44px
+  -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.15)
+  -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.15)
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.15)
+  background-color: #eeeeee
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fbfbfb), color-stop(100%, #e1e1e1))
+  background: -webkit-linear-gradient(top, #fbfbfb, #e1e1e1)
+  background: -moz-linear-gradient(top, #fbfbfb, #e1e1e1)
+  background: -o-linear-gradient(top, #fbfbfb, #e1e1e1)
+  background: linear-gradient(top, #fbfbfb, #e1e1e1)
+  display: -moz-inline-stack
+  display: inline-block
+  vertical-align: middle
+  *vertical-align: auto
+  zoom: 1
+  *display: inline
+  border: 1px solid #d4d4d4
+  height: 32px
+  line-height: 32px
+  padding: 0px 25.6px
+  font-weight: 300
+  font-size: 14px
+  font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif
+  color: #666666
+  text-shadow: 0 1px 1px white
+  margin: 0
+  text-decoration: none
+  text-align: center
+  -webkit-border-radius: 240px
+  -moz-border-radius: 240px
+  -ms-border-radius: 240px
+  -o-border-radius: 240px
+  border-radius: 240px
+  -webkit-box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.2)
+  -moz-box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.2)
+  box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.2)
+  width: 80px
+  height: 80px
+  padding: 0px
+  border-width: 4px
+  font-size: 19px
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #8fcf00), color-stop(100%, #6b9c00))
+  background: -webkit-linear-gradient(top, #8fcf00, #6b9c00)
+  background: -moz-linear-gradient(top, #8fcf00, #6b9c00)
+  background: -o-linear-gradient(top, #8fcf00, #6b9c00)
+  background: linear-gradient(top, #8fcf00, #6b9c00)
+  background-color: #7db500
+  border-color: whitesmoke
+  color: white
+  text-shadow: 0 -1px 1px rgba(19, 28, 0, 0.35)
+
+.search-button:hover
+  background-color: #eeeeee
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dcdcdc))
+  background: -webkit-linear-gradient(top, #ffffff, #dcdcdc)
+  background: -moz-linear-gradient(top, #ffffff, #dcdcdc)
+  background: -o-linear-gradient(top, #ffffff, #dcdcdc)
+  background: linear-gradient(top, #ffffff, #dcdcdc)
+  background-color: #7db500
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #a0e800), color-stop(100%, #6b9c00))
+  background: -webkit-linear-gradient(top, #a0e800, #6b9c00)
+  background: -moz-linear-gradient(top, #a0e800, #6b9c00)
+  background: -o-linear-gradient(top, #a0e800, #6b9c00)
+  background: linear-gradient(top, #a0e800, #6b9c00)
+
+.search-button:active
+  -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px white
+  -moz-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px white
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px white
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4)
+  background: #eeeeee
+  color: #bbbbbb
+  background: #76a312
+  color: #374f00

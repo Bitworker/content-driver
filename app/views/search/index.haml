@@ -1,3 +1,13 @@
-index
+.header
+  %h1
+    cd ..
+    %strong
+      Your content-driver
+  %h1.sub
+    %strong
+      Live crawling at his best!
 
-- form_tag 
+.search
+  = form_tag(result_path, method: "get") do
+    %input{ :name => "sites", :class => "sitesfield", :id => "sites" }
+    = submit_tag "Suche", :class => "search-button"
