@@ -82,7 +82,9 @@ class SearchController < ApplicationController
     end
     
     block.css('a').each do |a_tag|
-      a_tags.push(ensure_href(a_tag['href'], url))
+      if href = a_tag['href']
+        a_tags.push([:href => ensure_href(href, url), :text => a_tag.text])
+      end
     end
     
     block.css('h1').each do |h1_tag|
