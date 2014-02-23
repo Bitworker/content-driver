@@ -1,1 +1,20 @@
-= @site_data
+= #raise @site_data.inspect
+
+.results
+  .navigation 
+    .site-url
+      Alle Seiten
+    .site-url
+      = @site_data[:url]
+  .data-blocks 
+    - @site_data[:data_blocks].each do |block|
+      - if block[1][:p_tags].present?
+        .block
+          - block[1][:headlines][:h1_tags].each do |h1|
+            %h1= h1
+          - block[1][:headlines][:h2_tags].each do |h2|
+            %h2= h2
+          - block[1][:headlines][:h3_tags].each do |h3|
+            %h3= h3
+          - block[1][:p_tags].each do |p|
+            %p= p

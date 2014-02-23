@@ -39,7 +39,7 @@ class SearchController < ApplicationController
   protected
   
   def get_site_data url
-    @site_data = { 
+    @site_data = {
       :url         => url,
       :data_blocks => {}
     }
