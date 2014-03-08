@@ -9,8 +9,10 @@ class SearchController < ApplicationController
   end
   
   def result
-    get_site_data ensure_site_url(@sites.first)
+    @result_data = get_site_data ensure_site_url(@sites.first)
     
+    @update_sites = @sites.drop(1)
+
     # parse params to single sites
     
     # give single site to "site to data block" method
@@ -24,6 +26,15 @@ class SearchController < ApplicationController
     # methods starts over again
     
     # when no param is left, ajax dont gets injected for result page
+  end
+
+  def update_results
+    @update_results_data = get_site_data ensure_site_url(params[:update_site])
+
+    respond_to do |format|
+      format.html { render :nothing => true }
+      format.js   { render :layout  => false }
+    end
   end
   
   private
@@ -39,7 +50,7 @@ class SearchController < ApplicationController
   protected
   
   def get_site_data url
-    @site_data = {
+    data = {
       :url         => url,
       :data_blocks => {}
     }
@@ -50,19 +61,23 @@ class SearchController < ApplicationController
       parent = p_tag.parent
       
       if parent.css('a').present? && parent.css('img').present?
-        block_number = @site_data[:data_blocks].count + 1
+        block_number = data[:data_blocks].count + 1
         
-        @site_data[:data_blocks].merge!(create_data_block(parent, block_number, url))
+        data[:data_blocks].merge!(create_data_block(parent, block_number, url))
       else
         grand_parent = parent.parent
         
         if grand_parent.css('a').present? && grand_parent.css('img').present?
-          block_number = @site_data[:data_blocks].count + 1
+          block_number = data[:data_blocks].count + 1
           
-          @site_data[:data_blocks].merge!(create_data_block(grand_parent, block_number, url))
+          data[:data_blocks].merge!(create_data_block(grand_parent, block_number, url))
         end
       end
     end
+    
+    data[:url] = url + " (#{data[:data_blocks].count})"
+    
+    data
   end
   
   def create_data_block block, block_number, url

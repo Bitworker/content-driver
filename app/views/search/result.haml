@@ -1,24 +1,20 @@
-= #raise @site_data.inspect
+= #raise @result_data.inspect
+= #raise @update_sites.inspect
 
 .results
   .navigation
     .site-url
       Alle Seiten
     .site-url
-      = @site_data[:url]
+      = @result_data[:url]
   .data-blocks
-    - @site_data[:data_blocks].each do |block|
-      - if block[1][:p_tags].present?
-        .block
-          - block[1][:headlines][:h1_tags].each do |h1|
-            %h1= h1
-          - block[1][:headlines][:h2_tags].each do |h2|
-            %h2= h2
-          - block[1][:headlines][:h3_tags].each do |h3|
-            %h3= h3
-          - block[1][:p_tags].each do |p|
-            %p= p
-          - block[1][:a_tags].each do |a|
-            %a{ :href => a[0][:href] }= a[0][:text]
-          - block[1][:img_tags].each do |img|
-            %img{ :src => img }
+    = render :partial => "blocks", :locals => { :data_blocks => @result_data[:data_blocks] }
+
+- if @update_sites
+  - @update_sites.each do |site|
+    :javascript
+      $.ajax({
+        url: "#{ update_results_url }",
+        data: { update_site: "#{ site }" },
+        dataType: 'script'
+      });
