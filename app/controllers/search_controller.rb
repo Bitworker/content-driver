@@ -1,6 +1,7 @@
 class SearchController < ApplicationController
   require 'nokogiri'
   require 'open-uri'
+  require 'fastimage'
   
   before_filter :get_sites, :only => [:result]
   
@@ -11,20 +12,24 @@ class SearchController < ApplicationController
   def result
     @result_data = get_site_data ensure_site_url(@sites.first)
     
+    Search.create(:request_site => ensure_site_url(@sites.first), :created_at => Time.now)
+    
     @update_sites = @sites.drop(1)
   end
   
   def update_results
     @update_results_data = get_site_data ensure_site_url(params[:update_site])
     
+    Search.create(:request_site => ensure_site_url(params[:update_site]), :created_at => Time.current)
+
     respond_to do |format|
       format.html { render :nothing => true }
       format.js   { render :layout  => false }
     end
   end
   
-  private
-  
+  protected
+
   def get_sites
     if params[:sites]
       @sites = params[:sites].split(",")
@@ -32,28 +37,31 @@ class SearchController < ApplicationController
       redirect_to search_path
     end
   end
-  
-  protected
-  
+    
   def get_site_data url
     data = {
-      :url         => url,
+      :url         => '',
       :data_blocks => {}
     }
     
+    # Site structure settings based on p_tag start elment
+    min_p_tag_text_size = 60
+    min_a_tags          = 5
+    min_image_tags      = 5
+    
     html = Nokogiri::HTML(open(url))
     
-    html.css('p').each do |p_tag|
+    html.css('p').select{ |n| n.text.size > min_p_tag_text_size }.each do |p_tag|
       parent = p_tag.parent
       
-      if parent.css('a').present? && parent.css('img').present?
+      if parent.css('a').present? && parent.css('img').present? && parent.css('a').count <= min_a_tags && parent.css('img').count <= min_image_tags && parent.css('img').select{ |img| validate_image_size(img['src'], url) }.present?
         block_number = data[:data_blocks].count + 1
         
         data[:data_blocks].merge!(create_data_block(parent, block_number, url))
       else
         grand_parent = parent.parent
         
-        if grand_parent.css('a').present? && grand_parent.css('img').present?
+        if grand_parent.css('a').present? && grand_parent.css('img').present?  && grand_parent.css('a').count <= min_a_tags && grand_parent.css('img').count <= min_image_tags && grand_parent.css('img').select{ |img| validate_image_size(img['src'], url) }.present?
           block_number = data[:data_blocks].count + 1
           
           data[:data_blocks].merge!(create_data_block(grand_parent, block_number, url))
@@ -74,17 +82,23 @@ class SearchController < ApplicationController
     h2_tags  = []
     h3_tags  = []
     
+    biggest_p_tag_size = 0
     block.css('p').each do |p_tag|
-      p_tags.push(p_tag.text)
+      if p_tag.text.size > biggest_p_tag_size
+        biggest_p_tag_size = p_tag.text.size
+        p_tags = [p_tag.text]
+      end
     end
     
     block.css('img').each do |img_tag|
-      img_tags.push(img_tag['src'])
+      if src = img_tag['src']
+        img_tags.push(ensure_link(src, url))
+      end
     end
     
     block.css('a').each do |a_tag|
       if href = a_tag['href']
-        a_tags.push([:href => ensure_href(href, url), :text => a_tag.text])
+        a_tags.push([:href => ensure_link(href, url), :text => a_tag.text])
       end
     end
     
@@ -131,11 +145,19 @@ class SearchController < ApplicationController
     end
   end
   
-  def ensure_href href, url
-    if href.chars.first.in?("/", "\\")
-      url + href
+  def ensure_link href_or_src, url
+    if ["/", "\\"].include?(href_or_src.chars.first)
+      url + href_or_src
     else
-      href
+      href_or_src
+    end
+  end
+
+  def validate_image_size img_link, url
+    if image_size = FastImage.size(ensure_link(img_link, url), :raise_on_failure => false, :timeout => 0.1)
+      image_size.first > 50 && image_size.last > 50
+    else
+      false
     end
   end
 end
