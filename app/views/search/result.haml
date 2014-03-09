@@ -1,14 +1,18 @@
-= #raise @result_data.inspect
-= #raise @update_sites.inspect
-
 .results
   .navigation
-    .site-url
+    %a{ :href => "#", :class => "all-sites active" }
       Alle Seiten
-    .site-url
+    %a{ :href => "#", :class => "site", :data => { :url => @result_data[:url] } }
       = @result_data[:url]
+
+  .live-search
+    %form{ :id => "live-search" }
+      %label
+        Durchsuche deine Blöcke: 
+      %input
+
   .data-blocks
-    = render :partial => "blocks", :locals => { :data_blocks => @result_data[:data_blocks] }
+    = render :partial => "blocks", :locals => { :data_blocks => @result_data[:data_blocks], :url => @result_data[:url] }
 
 - if @update_sites
   - @update_sites.each do |site|

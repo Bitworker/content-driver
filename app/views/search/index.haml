@@ -1,3 +1,4 @@
+- news = 'www.n-tv.de, www.heute.de, www.bild.de, www.handelsblatt.com, www.stern.de, www.welt.de, www.spiegel.de'
 .header
   %h1
     cd ..
@@ -10,4 +11,17 @@
 .search
   = form_tag(result_path, method: "get") do
     %input{ :name => "sites", :class => "sitesfield", :id => "sites" }
+    .recommended-sites
+      = link_to 'Nachrichten', search_path(:sites => news)
+      |
+      = link_to 'später..', search_path
+      |
+      = link_to 'später..', search_path
+      |
+      = link_to 'später..', search_path
+    
     = submit_tag "Suche", :class => "search-button"
+
+- if params[:sites]
+  :javascript
+    $('#sites').importTags("#{ params[:sites] }");

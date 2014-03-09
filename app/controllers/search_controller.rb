@@ -12,25 +12,11 @@ class SearchController < ApplicationController
     @result_data = get_site_data ensure_site_url(@sites.first)
     
     @update_sites = @sites.drop(1)
-
-    # parse params to single sites
-    
-    # give single site to "site to data block" method
-    
-    # give data block + other sites to result page
-    
-    # result page loads data into table tool
-    
-    # ajax call with all sites in paras left is triggerd
-    
-    # methods starts over again
-    
-    # when no param is left, ajax dont gets injected for result page
   end
-
+  
   def update_results
     @update_results_data = get_site_data ensure_site_url(params[:update_site])
-
+    
     respond_to do |format|
       format.html { render :nothing => true }
       format.js   { render :layout  => false }
@@ -144,7 +130,7 @@ class SearchController < ApplicationController
       end
     end
   end
-
+  
   def ensure_href href, url
     if href.chars.first.in?("/", "\\")
       url + href

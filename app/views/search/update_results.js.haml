@@ -1,0 +1,3 @@
+$(".results .navigation").append("<a href=\"#\" class='site' data-url=\"#{ @update_results_data[:url] }\">#{ @update_results_data[:url] }</div>");
+$(".results .data-blocks").append("#{ j render(:partial => 'blocks', :locals => { :data_blocks => @update_results_data[:data_blocks], :url => @update_results_data[:url] }) }");
+$('.site').click(function() { url = $(this).data('url'); $('a').removeClass('active'); $(this).addClass('active'); $('.results .block').hide(); $('.results .block').each(function() { if ($(this).data('url') == url) { $(this).show(); }; }); });
