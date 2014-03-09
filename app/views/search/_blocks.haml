@@ -1,6 +1,6 @@
 - data_blocks.each do |block|
   - if block[1][:p_tags].present?
-    .block{ :data => { :url => url } }
+    .block{ :class => 'active', :data => { :url => url } }
       - block[1][:headlines][:h1_tags].each do |h1|
         %h1= h1
       - block[1][:headlines][:h2_tags].each do |h2|

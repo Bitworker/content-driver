@@ -1,90 +1,94 @@
+/* Search result page */
 
-/* Search result */
-
-.results
+.result-header
   width: 1160px
   margin-left: -580px
-  position: relative
+  position: fixed
   left: 50%
+  z-index: 1
+  height: 40px
+  background-color: slategrey
+  .logo, .live-search
+    float: left
+    label
+      position: relative
+      color: white
+      top: 11px
+      font-weight: bold
+  .logo
+    width: 200px
+    label
+      font-size: 18px
+      left: 7px
+  .live-search
+    width: 960px
+    label
+      font-size: 14px
+      left: 450px
+    input
+      float: right
+      margin: 7px
+      width: 300px
+      height: 25px
+      border-radius: 2px
+      margin-right: 11px
 
-.navigation, .data-blocks
-  float: left
-
-.navigation
-  width: 200px
-  .site, .all-sites
-    display: block
-    min-height: 30px
-    width: 100%
-    padding: 7px
-    background-color: #a0e800
-    color: black
-    text-decoration: none
-    font-size: 13px
-    &:hover
+.results
+  .navigation
+    top: 40px
+    width: 200px
+    margin-left: -580px
+    position: fixed
+    left: 50%
+    .all-sites
+      border-top: 10px solid azure
+    .site, .all-sites
+      display: block
+      min-height: 30px
+      width: 100%
+      padding: 7px
+      background-color: #a0e800
+      color: black
+      text-decoration: none
+      font-size: 13px
+      font-weight: bold
+      border-bottom: 1px solid azure
+      &:hover
+        background-color: #76a312
+        color: white
+    a.active
       background-color: #76a312
       color: white
-  a.active
-    background-color: #76a312
-    color: white
-    font-weight: bold
-
-.live-search
-  width: 960px
-  height: 30px
-  margin-left: 200px
-  background-color: black
-  label
+  
+  .data-blocks
+    top: 40px
+    width: 960px
+    margin-left: -380px
     position: relative
-    color: white
-    font-size: 13px
-    top: 4px
-    left: 468px
-    font-weight: bold
-  input
-    float: right
-    margin: 4px
-    margin-right: 10px
-    width: 300px
-
-.data-blocks
-  width: 960px
-  .block
-    min-height: 320px
-    background-color: smokewhite
-    -moz-box-shadow: 0 0 5px 0px #76a312
-    -webkit-box-shadow: 0 0 5px 0px #76a312
-    box-shadow: 0 0 5px 0px #76a312
-
-.site, .block, .all-sites
-  -webkit-font-smoothing: antialiased
-  -webkit-text-size-adjust: 100%
-  -ms-text-size-adjust: 100%
-  -webkit-box-sizing: border-box
-  -moz-box-sizing: border-box
-  box-sizing: border-box
-  outline: none
-
-.block
-  border: 1px solid #76a312
-.site, .all-sites
-  border-top: 1px solid azure
-
-.block
-  margin: 10px
-  width: 300px
-  height: 300px
-  float: left
-  overflow: hidden
-  h1
-    font-size: 18px
-    font-weight: bold
-  h2
-    font-size: 16px
-    font-weight: bold
-  h3
-    font-size: 14px
-    font-weight: bold
-  p
-    font-size: 12px
-
+    left: 50%
+    .block
+      margin: 10px
+      width: 300px
+      height: 300px
+      float: left
+      overflow: hidden
+      background-color: whitesmoke
+      -moz-box-shadow: 0 0 3px 0px #76a312
+      -webkit-box-shadow: 0 0 3px 0px #76a312
+      box-shadow: 0 0 3px 0px #76a312
+    .active
+      display: block
+    .inactive
+      display: none
+      
+      h1
+        font-size: 18px
+        font-weight: bold
+      h2
+        font-size: 16px
+        font-weight: bold
+      h3
+        font-size: 14px
+        font-weight: bold
+      p
+        font-size: 12px

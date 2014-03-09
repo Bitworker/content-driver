@@ -1,0 +1,23 @@
+:javascript
+  $('.site').click(function() {   
+    new_url = $(this).data('url');
+    old_url = $('.site.active').data('url');
+    
+    if (new_url == old_url) { return; }
+    
+    $("#live-search input").val("");
+    
+    $('.results .block').removeClass('active').addClass('inactive');
+    $('.results .block').each(function() {
+     if ($(this).data('url') == new_url) {
+        $(this).removeClass('inactive').addClass('active');
+      }
+    })
+    
+    var old_block_count = $(".block.inactive[data-url='" + old_url + "']").length;
+    new_link_text = $('.site.active').text().replace(/\(([^)]+)\)/, "") + " (" + old_block_count + ")";
+    $('.site.active').html( new_link_text );
+    
+    $('.navigation a').removeClass('active');
+    $(this).addClass('active');
+  })

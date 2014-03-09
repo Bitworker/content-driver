@@ -4,7 +4,7 @@ class SearchController < ApplicationController
   
   before_filter :get_sites, :only => [:result]
   
-  def index
+  def search
     
   end
   
