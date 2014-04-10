@@ -6,7 +6,6 @@ class SearchController < ApplicationController
   before_filter :get_sites, :only => [:result]
   
   def search
-    
   end
   
   def result
@@ -29,15 +28,7 @@ class SearchController < ApplicationController
   end
   
   protected
-
-  def get_sites
-    if params[:sites]
-      @sites = params[:sites].split(",")
-    else
-      redirect_to search_path
-    end
-  end
-    
+   
   def get_site_data url
     data = {
       :url         => '',
@@ -46,22 +37,31 @@ class SearchController < ApplicationController
     
     # Site structure settings based on p_tag start elment
     min_p_tag_text_size = 60
-    min_a_tags          = 5
-    min_image_tags      = 5
+    max_a_tags          = 5
+    max_image_tags      = 5
+    spam_filter         = true
     
     html = Nokogiri::HTML(open(url))
     
-    html.css('p').select{ |n| n.text.size > min_p_tag_text_size }.each do |p_tag|
-      parent = p_tag.parent
+    html.css('p').select{ |n| n.text.size >= min_p_tag_text_size }.each do |p_tag|
+      parent = spam_filter ? spam_filter(p_tag.parent) : p_tag.parent
       
-      if parent.css('a').present? && parent.css('img').present? && parent.css('a').count <= min_a_tags && parent.css('img').count <= min_image_tags && parent.css('img').select{ |img| validate_image_size(img['src'], url) }.present?
+      if parent                              &&
+         parent.css('a').present?            && parent.css('img').present? &&
+         parent.css('a').count <= max_a_tags && parent.css('img').count <= max_image_tags && 
+         parent.css('img').select{ |img| validate_image_size(img['src'], url) }.present?
+        
         block_number = data[:data_blocks].count + 1
         
         data[:data_blocks].merge!(create_data_block(parent, block_number, url))
-      else
-        grand_parent = parent.parent
+      elsif parent
+        grand_parent = spam_filter ? spam_filter(parent.parent) : parent.parent
         
-        if grand_parent.css('a').present? && grand_parent.css('img').present?  && grand_parent.css('a').count <= min_a_tags && grand_parent.css('img').count <= min_image_tags && grand_parent.css('img').select{ |img| validate_image_size(img['src'], url) }.present?
+        if grand_parent                              &&
+           grand_parent.css('a').present?            && grand_parent.css('img').present? &&
+           grand_parent.css('a').count <= max_a_tags && grand_parent.css('img').count <= max_image_tags && 
+           grand_parent.css('img').select{ |img| validate_image_size(img['src'], url) }.present?
+          
           block_number = data[:data_blocks].count + 1
           
           data[:data_blocks].merge!(create_data_block(grand_parent, block_number, url))
@@ -114,20 +114,42 @@ class SearchController < ApplicationController
       h3_tags.push(h3_tag.text)
     end
     
+    # FIXME:Uniq not working for a tags
     data_block = {
       eval(":block_#{block_number}") => {
-        :p_tags    => p_tags,
-        :img_tags  => img_tags,
-        :a_tags    => a_tags,
+        :p_tags    => p_tags.uniq,
+        :img_tags  => img_tags.uniq,
+        :a_tags    => a_tags.uniq,
         :headlines => {
-          :h1_tags => h1_tags,
-          :h2_tags => h2_tags,
-          :h3_tags => h3_tags
+          :h1_tags => h1_tags.uniq,
+          :h2_tags => h2_tags.uniq,
+          :h3_tags => h3_tags.uniq
         }
       }
     }
     
     data_block
+  end
+  
+  # Before Filter
+  
+  def get_sites
+    if params[:sites]
+      @sites = params[:sites].split(",")
+    else
+      redirect_to search_path
+    end
+  end
+  
+  # Helper
+  
+  def spam_filter element
+    check_for_whatever(element)
+    # add more here
+  end
+  
+  def check_for_whatever element
+    element
   end
   
   def ensure_site_url site
@@ -152,10 +174,11 @@ class SearchController < ApplicationController
       href_or_src
     end
   end
-
+  
   def validate_image_size img_link, url
+    # FIXME: Nokogiri saves the image width/height already. Should be faster
     if image_size = FastImage.size(ensure_link(img_link, url), :raise_on_failure => false, :timeout => 0.1)
-      image_size.first > 50 && image_size.last > 50
+      image_size.first > 64 && image_size.last > 64
     else
       false
     end
